@@ -49,3 +49,10 @@ Báo cáo run hiện dựa trên metadata người dùng nhập. Chưa tự tín
 - [wazuh-logtest](https://documentation.wazuh.com/current/user-manual/reference/tools/wazuh-logtest.html): -U kiểm rule/level/decoder cho một dòng log.
 - [Codex non-interactive](https://learn.chatgpt.com/docs/non-interactive-mode): stdin, JSONL, schema, ephemeral và dùng lại phiên đăng nhập.
 - [OpenAI Structured Outputs](https://developers.openai.com/api/docs/guides/structured-outputs): JSON schema; vẫn cần xử lý refusal/incomplete và kiểm nội dung.
+
+
+## Giới hạn đầu vào và đánh giá held-out
+
+Nhập file JSON/JSONL thủ công giới hạn 1.000.000 byte. Indexer giới hạn phản hồi HTTP 2.000.000 byte trước parse; event đã parse được gom trực tiếp, không serialize lại qua bộ nhập file 1 MB. Cả hai vẫn kiểm shape và tối đa500 event; vượt 2 MB trả response_too_large. Giới hạn snapshot RAM và preview AI là các lớp riêng, không là lý do để nới giới hạn nhập file.
+
+Candidate chỉ phát triển từ development. Run tuned trên held-out được tham chiếu candidate development khác ca, ghi nguồn và SHA-256 của phiên bản đã đánh giá; run này không tạo candidate hoặc cho phép tinh chỉnh held-out.

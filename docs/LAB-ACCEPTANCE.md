@@ -36,3 +36,8 @@ Biểu mẫu Ca thử/Bằng chứng/Lần chạy/Kiểm thử rule trongapp là
 - Kịch bản held-out được giữ độc lập. Chất lượng, độ trễ và nhận định sai được ghi bằng số liệu đo thực.
 
 Nếu chưa đạt, ghi lỗi và sửa source/rule; không tuyên bố đạt vì unit tests hoặc một lần replay thành công.
+
+
+## Ghi run held-out với rule đã phát triển
+
+Candidate phải được tạo từ ca development. Để đánh giá trên một ca held-out khác, chọn ca held-out ở mục Lần chạy, chọn phase=tuned và candidate development đã chốt. Ở đây tuned có nghĩa dùng phiên bản rule đã phát triển, không có nghĩa được tinh chỉnh trên dữ liệu held-out. Run giữ candidate ID, SHA-256 và ca development nguồn; candidate không bị sửa. Ca development vẫn phải dùng candidate của chính ca đó. Baseline không gắn candidate; tạo candidate mới/child từ held-out vẫn bị chặn.

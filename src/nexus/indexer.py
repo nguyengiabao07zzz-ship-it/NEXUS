@@ -12,7 +12,7 @@ from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, HTTPSHandler, ProxyHandler, Request, build_opener
 
 from .core import Invalid, load_json_bounded
-from .intake import inspect_events
+from .intake import summarize_events
 
 INDICES = {'alerts': 'wazuh-alerts-*', 'archives': 'wazuh-archives-*'}
 MAX_RESPONSE_BYTES = 2_000_000
@@ -163,7 +163,7 @@ def collect(config_path, source='alerts', minutes=60, limit=100, agent_id=''):
                 raise ValueError()
             seen.add(pair)
             documents.append({'index': index, 'id': identifier, 'event': event})
-        preview = inspect_events(json.dumps([d['event'] for d in documents]), source, 'lab') if documents else None
+        preview = summarize_events([d['event'] for d in documents], source, 'lab') if documents else None
     except CollectionError:
         raise
     except (KeyError, TypeError, ValueError, RecursionError):

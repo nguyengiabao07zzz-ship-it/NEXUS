@@ -133,7 +133,7 @@ class Store:
                 if k not in FIELDS or not isinstance(data, dict):
                     raise Invalid('Stored record shape')
                 # Legacy evidence without role stays readable, but cannot qualify a lab run.
-                allowed_derived = {'outcome', 'sha256', 'validation', 'candidate_sha256', 'provenance'}
+                allowed_derived = {'outcome', 'sha256', 'validation', 'candidate_sha256', 'candidate_source_case_id', 'provenance'}
                 validate_input(k, {name: value for name, value in data.items() if name not in allowed_derived})
                 if k == 'run' and (data.get('phase') not in ('baseline', 'tuned') or
                                    data.get('outcome') != classify(data)):
@@ -170,7 +170,7 @@ class Store:
             data['sha256'] = hashlib.sha256(data['content'].encode()).hexdigest()
         elif kind == 'run':
             required(data, 'case_id', 'phase', 'execution', 'notes')
-            self.get(data['case_id'], 'case')
+            evaluation_case = self.get(data['case_id'], 'case')
             if data['phase'] not in ('baseline', 'tuned'):
                 raise Invalid('phase không hợp lệ')
             if data.get('execution_evidence') and data.get('execution_evidence') == data.get('observation_evidence'):
@@ -183,8 +183,16 @@ class Store:
                         raise Invalid('Bằng chứng thiếu role hoặc sai vai trò')
             if data['phase'] == 'tuned':
                 required(data, 'candidate_id')
-                if self.get(data['candidate_id'], 'candidate')['case_id'] != data['case_id']:
-                    raise Invalid('Candidate phải thuộc cùng ca thử')
+                candidate = self.get(data['candidate_id'], 'candidate')
+                source_case = self.get(candidate['case_id'], 'case')
+                if source_case['split'] != 'development':
+                    raise Invalid('Candidate phải được phát triển từ ca development')
+                if candidate['case_id'] != data['case_id'] and evaluation_case['split'] != 'held_out':
+                    raise Invalid('Ca development phải dùng candidate cùng ca; candidate khác ca chỉ dùng để đánh giá held_out')
+                # Pin the immutable version evaluated; evaluating held-out does
+                # not create or modify a candidate from that case.
+                data['candidate_sha256'] = candidate['sha256']
+                data['candidate_source_case_id'] = source_case['id']
             elif data.get('candidate_id'):
                 raise Invalid('Baseline không được có candidate')
             data['outcome'] = classify(data)

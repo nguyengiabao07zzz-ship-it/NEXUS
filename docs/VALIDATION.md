@@ -22,3 +22,8 @@ Kết luận: bản phần mềm dành cho **kiểm thử lab có giám sát**, 
 Ảnh dưới đây chỉ là kiểm tra UI bằng fixture/model mock, không phải dữ liệu lab hoặc kết quả phát hiện.
 
 ![Lịch sử fixture](assets/lab-history-fixture.jpg)
+
+
+## Sửa lỗi chức năng sau review commit da84d3e
+
+Đã tái hiện việc run tuned trên held-out bị từ chối và phản hồi Indexer hợp lệ khoảng1,1 MB bị báo invalid_response. Bộ hồi quy mới kiểm cả ASCII/UTF-8, HTTP records và snapshot API, giữ giới hạn file1 MB/phản hồi2 MB, cùng các guard development/held-out. Sau sửa:118/118 tests tại máy đạt. Kết quả này xác minh hành vi phần mềm, không thay đổi giới hạn nghiệm thu trên Wazuh thật nêu ở trên.

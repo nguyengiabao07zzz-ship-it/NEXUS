@@ -61,7 +61,20 @@ def inspect_events(text, source, origin):
                 raise Invalid(f'JSONL không hợp lệ tại dòng {line_number}') from None
     except (ValueError, RecursionError):
         raise Invalid('JSON không hợp lệ hoặc vượt giới hạn') from None
-    if not events or len(events) > MAX_EVENTS:
+    result = summarize_events(events, source, origin)
+    result['input_sha256'] = hashlib.sha256(text.encode('utf-8')).hexdigest()
+    return result
+
+
+def summarize_events(events, source, origin):
+    """Group parsed events after the caller's own bounded input admission.
+
+    Manual files are admitted by inspect_events (1 MB). Indexer HTTP responses
+    are admitted by indexer._request (2 MB). Never serialize one into the other.
+    """
+    if source not in ('alerts', 'archives') or origin not in ('fixture', 'lab'):
+        raise Invalid('Cần chọn nguồn alerts/archives và xuất xứ fixture/lab')
+    if not isinstance(events, list) or not events or len(events) > MAX_EVENTS:
         raise Invalid('Cần từ 1 đến 500 event')
 
     groups, fingerprints, rule_count = {}, set(), 0
@@ -91,7 +104,7 @@ def inspect_events(text, source, origin):
     return {
         'provenance': 'manual_import_preview_not_collector_verified',
         'declared_source': source, 'declared_origin': origin,
-        'input_sha256': hashlib.sha256(text.encode('utf-8')).hexdigest(),
+        'input_sha256': hashlib.sha256(json.dumps(events, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest(),
         'total_events': len(events), 'events_with_rule_id': rule_count,
         'events_without_rule_id': len(events) - rule_count,
         'repeated_content_count': len(events) - len(fingerprints),

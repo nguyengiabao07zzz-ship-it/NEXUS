@@ -1,0 +1,5 @@
+{
+  "provider": "codex_cli",
+  "model": "gpt-6.1-sol",
+  "max_output_tokens": 2048
+}

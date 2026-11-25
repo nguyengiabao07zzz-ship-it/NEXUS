@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-11-12T10:23:45.123+0700",
+  "rule": {
+    "level": 3,
+    "description": "Synthetic fixture: Sysmon process creation, not a verified Wazuh rule",
+    "id": "100901",
+    "firedtimes": 1,
+    "mail": false,
+    "groups": ["windows", "sysmon", "process_creation"],
+    "mitre": {"id": ["T1059.003"], "tactic": ["Execution"], "technique": ["Windows Command Shell"]}
+  },
+  "agent": {"id": "001", "name": "CANARY-HOST-R202", "ip": "192.0.2.41"},
+  "manager": {"name": "CANARY-MANAGER-R202"},
+  "id": "1794453825.123456",
+  "decoder": {"name": "windows_eventchannel"},
+  "location": "EventChannel",
+  "data": {
+    "win": {
+      "system": {
+        "providerName": "Microsoft-Windows-Sysmon",
+        "providerGuid": "{5770385f-c22a-43e0-bf4c-06f5698ffbd9}",
+        "eventID": "1",
+        "version": "5",
+        "level": "4",
+        "task": "1",
+        "opcode": "0",
+        "keywords": "0x8000000000000000",
+        "systemTime": "2026-11-12T03:23:45.1234567Z",
+        "eventRecordID": "1234",
+        "processID": "456",
+        "threadID": "789",
+        "channel": "Microsoft-Windows-Sysmon/Operational",
+        "computer": "CANARY-HOST-R202",
+        "severityValue": "INFORMATION",
+        "message": "Synthetic process: CANARY-MESSAGE-R202"
+      },
+      "eventdata": {
+        "ruleName": "SyntheticProcessFixture",
+        "utcTime": "2026-11-12 03:23:45.123",
+        "processGuid": "{00000000-0000-0000-0000-000000000123}",
+        "processId": "4242",
+        "image": "C:\\Windows\\System32\\certutil.exe",
+        "fileVersion": "10.0.26100.1",
+        "description": "CANARY-DESCRIPTION-R202",
+        "product": "Microsoft Windows Operating System",
+        "company": "Microsoft Corporation",
+        "originalFileName": "CertUtil.exe",
+        "commandLine": "certutil.exe -urlcache -f http://fixture.invalid/CANARY-URL-R202 C:\\Users\\CANARY PERSON R202\\Downloads\\sample.txt",
+        "currentDirectory": "C:\\Users\\CANARY PERSON R202\\Downloads\\",
+        "user": "FIXTURE\\CANARY PERSON R202",
+        "logonGuid": "{00000000-0000-0000-0000-000000000456}",
+        "logonId": "0x123456",
+        "terminalSessionId": "1",
+        "integrityLevel": "Medium",
+        "hashes": "SHA256=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "parentProcessGuid": "{00000000-0000-0000-0000-000000000789}",
+        "parentProcessId": "4000",
+        "parentImage": "C:\\Windows\\System32\\cmd.exe",
+        "parentCommandLine": "cmd.exe /c CANARY-ARGUMENT-R202",
+        "parentUser": "FIXTURE\\CANARY PERSON R202",
+        "Authorization": "Bearer CANARY-BEARER-R202"
+      }
+    }
+  },
+  "full_log": "Synthetic full_log with CANARY-FULLLOG-R202; not collected from any endpoint"
+}

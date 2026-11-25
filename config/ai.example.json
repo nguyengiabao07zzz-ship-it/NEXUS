@@ -1,0 +1,5 @@
+{
+  "provider": "openai",
+  "model": "YOUR_MODEL_ID",
+  "max_output_tokens": 2048
+}

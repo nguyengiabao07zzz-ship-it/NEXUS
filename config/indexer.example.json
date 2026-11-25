@@ -1,0 +1,6 @@
+{
+  "url": "https://127.0.0.1:19200",
+  "username": "nexus_reader",
+  "password_env": "NEXUS_INDEXER_PASSWORD",
+  "ca_file": "C:/path/to/verified-root-ca.pem"
+}
